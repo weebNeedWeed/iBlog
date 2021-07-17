@@ -5,8 +5,11 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
-import { Grid } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import Card from "../components/Card/Card.index";
+import dbConnect from "./../utils/dbConnect";
+import Post from "./../models/Post";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -25,8 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home() {
+export default function Home({ listPosts }) {
   const classes = useStyles();
+  const posts = JSON.parse(listPosts);
 
   return (
     <>
@@ -54,10 +58,36 @@ export default function Home() {
             </Grid>
           </Grid>
           <Container maxWidth="md">
-            <Card />
+            {posts.map((elm, index) => (
+              <Card
+                key={index}
+                {...elm}
+                gutterBottom={index !== posts.length - 1}
+              />
+            ))}
           </Container>
         </Container>
       </>
     </>
   );
+}
+
+Home.propTypes = {
+  listPosts: PropTypes.string,
+};
+
+export async function getServerSideProps() {
+  await dbConnect();
+  const topFiveLatestPosts = await Post.find(
+    {},
+    "createdAt title slug description",
+  )
+    .sort({ createdAt: -1 })
+    .limit(5);
+
+  return {
+    props: {
+      listPosts: JSON.stringify(topFiveLatestPosts),
+    },
+  };
 }

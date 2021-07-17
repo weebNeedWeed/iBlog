@@ -4,6 +4,7 @@ import useStyles from "./NavBar.styles";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "next/link";
+import PropTypes from "prop-types";
 
 function NavBarPresentation({ routes, currentPathname }) {
   const classes = useStyles();
@@ -21,7 +22,7 @@ function NavBarPresentation({ routes, currentPathname }) {
       <Grid container spacing={3} justifyContent="center">
         {routes.map((elm, index) => (
           <Grid item key={index}>
-            <Link href="#">
+            <Link href={elm.pathname}>
               <Button
                 size="large"
                 variant="outlined"
@@ -36,5 +37,15 @@ function NavBarPresentation({ routes, currentPathname }) {
     </div>
   );
 }
+
+NavBarPresentation.propTypes = {
+  routes: PropTypes.arrayOf(
+    PropTypes.shape({
+      pathname: PropTypes.string,
+      display: PropTypes.string,
+    }),
+  ),
+  currentPathname: PropTypes.string,
+};
 
 export default NavBarPresentation;

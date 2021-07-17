@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => ({
     border: "solid #383838 1px",
     borderRadius: "10px",
     padding: "8px",
+    marginBottom: (gutterBottom) => (gutterBottom ? "15px" : "0px"),
   },
   link: {
     color: "#383838",

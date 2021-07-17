@@ -2,33 +2,39 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "./Card.styles";
 import Link from "next/link";
+import PropTypes from "prop-types";
 
-function CardPresentation() {
-  const classes = useStyles();
+function CardPresentation(props) {
+  const classes = useStyles(props.gutterBottom);
+  const { title, description, slug, createdAt } = props;
 
   return (
     <div className={classes.wrapper}>
       <Typography variant="caption" display="block">
-        datetime
+        {createdAt}
       </Typography>
-      <Link href="#">
+      <Link href={`/posts/${slug}`}>
         <Typography variant="h6" className={classes.title}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque libero
-          aspernatur quasi blanditiis distinctio autem eligendi itaque velit
-          molestias quibusdam architecto
+          {title}
         </Typography>
       </Link>
       <Typography variant="body1">
-        body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-        blanditiis tenetur unde suscipit, quam beatae rerum inventore
-        consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-        fugiat deleniti? Eum quasi quidem quibusdam{"..."}
-        <Link href="#">
+        {description}
+        {"..."}
+        <Link href={`/posts/${slug}`}>
           <a className={classes.link}>read more</a>
         </Link>
       </Typography>
     </div>
   );
 }
+
+CardPresentation.propTypes = {
+  title: PropTypes.string,
+  createdAt: PropTypes.string,
+  description: PropTypes.string,
+  slug: PropTypes.string,
+  gutterBottom: PropTypes.bool,
+};
 
 export default CardPresentation;
