@@ -6,6 +6,9 @@ import "normalize.css";
 import { Provider as StoreProvider } from "react-redux";
 import configureStore from "../redux/configureStore";
 import { PersistGate } from "redux-persist/integration/react";
+import NextNprogress from "nextjs-progressbar";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
   const { store, persistor } = configureStore();
@@ -21,7 +24,25 @@ function MyApp({ Component, pageProps }) {
       <StoreProvider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ThemeProvider theme={customTheme}>
+            <NextNprogress
+              color="#000"
+              startPosition={0.3}
+              stopDelayMs={200}
+              height={3}
+              showOnShallow={true}
+            />
             <Component {...pageProps} />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
           </ThemeProvider>
         </PersistGate>
       </StoreProvider>
