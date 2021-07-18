@@ -10,6 +10,7 @@ import Post from "./../../models/Post";
 import PropTypes from "prop-types";
 import useSWR from "swr";
 import { toast } from "react-toastify";
+import Footer from "../../layouts/Footer/Footer.index";
 
 const useStyles = makeStyles({
   container: {
@@ -71,6 +72,7 @@ export default function Posts({ postCount }) {
             />
           </Container>
         </Container>
+        <Footer />
       </>
     </>
   );

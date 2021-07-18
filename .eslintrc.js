@@ -8,7 +8,7 @@ const config = {
     "no-console": "off",
     "no-empty": ["warn", { allowEmptyCatch: true }],
     "react/prop-types": "off",
-    "prettier/prettier": "warn",
+    "prettier/prettier": ["warn", { endOfLine: "auto" }],
     eqeqeq: "error",
     "no-unused-vars": "warn",
     "global-require": "warn",

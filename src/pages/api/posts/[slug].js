@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const post = await Post.findOne({ slug });
 
   if (!post) {
-    return res.status(404).json({ error: "Data not found" });
+    return res.status(404).json({ message: "Data not found" });
   }
 
   return res.status(200).json(post);

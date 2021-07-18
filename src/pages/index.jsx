@@ -10,6 +10,7 @@ import Card from "../components/Card/Card.index";
 import dbConnect from "./../utils/dbConnect";
 import Post from "./../models/Post";
 import PropTypes from "prop-types";
+import Footer from "../layouts/Footer/Footer.index";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -67,6 +68,7 @@ export default function Home({ listPosts }) {
             ))}
           </Container>
         </Container>
+        <Footer />
       </>
     </>
   );
