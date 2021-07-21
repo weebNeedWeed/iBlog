@@ -12,7 +12,7 @@ const config = {
     eqeqeq: "error",
     "no-unused-vars": "warn",
     "global-require": "warn",
-    "no-mixed-operators": "error",
+    "no-mixed-operators": "off",
     "no-tabs": ["error", { allowIndentationTabs: true }],
     "react/display-name": "off",
     "react/react-in-jsx-scope": "off",

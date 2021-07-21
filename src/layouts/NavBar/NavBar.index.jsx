@@ -3,11 +3,15 @@ import NavBarPresentation from "./NavBar.presentation";
 import routes from "./../../utils/routes";
 import { useRouter } from "next/router";
 
-function NavBar() {
+function NavBar(props) {
   const router = useRouter();
 
   return (
-    <NavBarPresentation routes={routes} currentPathname={router.pathname} />
+    <NavBarPresentation
+      {...props}
+      routes={routes}
+      currentPathname={router.pathname}
+    />
   );
 }
 

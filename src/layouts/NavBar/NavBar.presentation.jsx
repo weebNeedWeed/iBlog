@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Link from "next/link";
 import PropTypes from "prop-types";
 
-function NavBarPresentation({ routes, currentPathname }) {
+function NavBarPresentation({ routes, currentPathname, loggedIn }) {
   const classes = useStyles();
 
   return (
@@ -20,19 +20,43 @@ function NavBarPresentation({ routes, currentPathname }) {
         {"iBlog"}
       </Typography>
       <Grid container spacing={3} justifyContent="center">
-        {routes.map((elm, index) => (
-          <Grid item key={index}>
-            <Link href={elm.pathname}>
-              <Button
-                size="large"
-                variant="outlined"
-                disabled={currentPathname === elm.pathname}
-              >
-                {elm.display}
-              </Button>
-            </Link>
-          </Grid>
-        ))}
+        {routes.map((elm, index) => {
+          if (loggedIn) {
+            if (elm.displayWhenLoggedIn) {
+              return (
+                <Grid item key={index}>
+                  <Link href={elm.pathname}>
+                    <Button
+                      size="large"
+                      variant="outlined"
+                      disabled={currentPathname === elm.pathname}
+                    >
+                      {elm.display}
+                    </Button>
+                  </Link>
+                </Grid>
+              );
+            }
+
+            return null;
+          }
+
+          if (elm.displayWhenLoggedOut) {
+            return (
+              <Grid item key={index}>
+                <Link href={elm.pathname}>
+                  <Button
+                    size="large"
+                    variant="outlined"
+                    disabled={currentPathname === elm.pathname}
+                  >
+                    {elm.display}
+                  </Button>
+                </Link>
+              </Grid>
+            );
+          }
+        })}
       </Grid>
     </div>
   );
@@ -46,6 +70,7 @@ NavBarPresentation.propTypes = {
     }),
   ),
   currentPathname: PropTypes.string,
+  loggedIn: PropTypes.bool,
 };
 
 export default NavBarPresentation;
