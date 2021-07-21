@@ -10,10 +10,13 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Footer from "../layouts/Footer/Footer.index";
 import { toast } from "react-toastify";
+import sessionConfigure from "../utils/sessionConfigure";
+import { applySession } from "next-session";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles({
   container: {
-    marginTop: "100px",
+    marginTop: "90px",
   },
   form: {
     textAlign: "center",
@@ -41,6 +44,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [displayError, setDisplayError] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,22 +67,21 @@ export default function Login() {
     });
 
     if (response.status !== 200) {
-      toast.error("Login failed", {
+      return toast.error("Login failed", {
         toastId: "errorLogin",
       });
-      return;
     }
 
-    toast.success("Login success. Redirecting...", {
+    router.push("/createpost");
+    return toast.success("Login success. Redirecting...", {
       toastId: "successLogin",
     });
-    return;
   };
 
   return (
     <>
       <Head>
-        <title>iBlog - login</title>
+        <title>{"iBlog - login"}</title>
       </Head>
       <>
         <NavBar />
@@ -145,4 +148,20 @@ export default function Login() {
       </>
     </>
   );
+}
+
+export async function getServerSideProps({ req, res }) {
+  await applySession(req, res, sessionConfigure);
+  const { authKey } = req.session;
+
+  if (authKey) {
+    return {
+      redirect: {
+        destination: "/createpost",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
 }

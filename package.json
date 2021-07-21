@@ -11,20 +11,18 @@
   "dependencies": {
     "@material-ui/core": "^4.12.1",
     "@material-ui/icons": "^4.11.2",
+    "draft-js": "^0.11.7",
+    "khong-dau": "^2.0.0",
     "md5": "^2.3.0",
     "mongoose": "^5.13.2",
     "next": "11.0.1",
+    "next-session": "^3.4.0",
     "nextjs-progressbar": "^0.0.11",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-redux": "^7.2.4",
     "react-toastify": "^7.0.4",
-    "redux": "^4.1.0",
-    "redux-devtools-extension": "^2.13.9",
-    "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
     "swr": "^0.5.6"
   },
   "devDependencies": {

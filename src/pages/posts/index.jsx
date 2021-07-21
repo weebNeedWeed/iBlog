@@ -11,16 +11,29 @@ import PropTypes from "prop-types";
 import useSWR from "swr";
 import { toast } from "react-toastify";
 import Footer from "../../layouts/Footer/Footer.index";
+import sessionConfigure from "../../utils/sessionConfigure";
+import { applySession } from "next-session";
 
 const useStyles = makeStyles({
   container: {
-    marginTop: "100px",
+    marginTop: "90px",
   },
 });
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = async (url) => {
+  const res = await fetch(url);
 
-export default function Posts({ postCount }) {
+  if (!res.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    error.info = await res.json();
+    error.status = res.status;
+    throw error;
+  }
+
+  return res.json();
+};
+
+export default function Posts({ postCount, loggedIn }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -39,26 +52,30 @@ export default function Posts({ postCount }) {
     setPage(0);
   };
 
-  let willRender;
+  let willRender = <p>{"Loading"}</p>;
   if (error) {
     toast.error("Failed to load data", {
       toastId: "errorFetchData",
     });
 
-    willRender = <div>Failed to load data</div>;
+    willRender = <p>{"Failed to load data"}</p>;
   } else if (data) {
     willRender = data.map((elm, index) => (
       <Card key={index} {...elm} gutterBottom={index !== data.length - 1} />
     ));
+
+    if (data.length === 0) {
+      willRender = <p>{"No posts"}</p>;
+    }
   }
 
   return (
     <>
       <Head>
-        <title>iBlog - Post list</title>
+        <title>{"iBlog - post list"}</title>
       </Head>
       <>
-        <NavBar />
+        <NavBar loggedIn={loggedIn} />
         <Container maxWidth="md" className={classes.container}>
           <Container maxWidth="md">
             {willRender}
@@ -80,15 +97,18 @@ export default function Posts({ postCount }) {
 
 Posts.propTypes = {
   postCount: PropTypes.number,
+  loggedIn: PropTypes.bool,
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req, res }) {
+  await applySession(req, res, sessionConfigure);
   await dbConnect();
   const postCount = await Post.countDocuments();
 
   return {
     props: {
       postCount,
+      loggedIn: Boolean(req.session.authKey),
     },
   };
 }

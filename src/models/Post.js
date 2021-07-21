@@ -4,7 +4,6 @@ const PostSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    unique: true,
     minLength: 1,
     maxLength: 200,
   },
@@ -15,8 +14,6 @@ const PostSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
-    minLength: 1,
     maxLength: 200,
   },
   content: {
