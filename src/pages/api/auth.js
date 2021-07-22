@@ -1,12 +1,10 @@
 import dbConnect from "../../utils/dbConnect";
 import User from "./../../models/User";
 import md5 from "md5";
-import { applySession } from "next-session";
-import sessionConfigure from "../../utils/sessionConfigure";
+import withSession from "./../../utils/withSession";
 
-export default async function handler(req, res) {
+export default withSession(async (req, res) => {
   await dbConnect();
-  await applySession(req, res, sessionConfigure);
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -18,6 +16,7 @@ export default async function handler(req, res) {
     return res.status(404).json({ error: "Data not found" });
   }
 
-  req.session.authKey = `${user._id}${user.password}_${user.username}`;
+  req.session.set("authKey", `${user._id}${user.password}_${user.username}`);
+  await req.session.save();
   return res.status(200).json({ message: "success" });
-}
+});

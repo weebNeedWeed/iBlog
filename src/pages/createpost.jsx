@@ -8,8 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import dbConnect from "./../utils/dbConnect";
 import User from "./../models/User";
 import PropTypes from "prop-types";
-import { applySession } from "next-session";
-import sessionConfigure from "../utils/sessionConfigure";
+import withSession from "../utils/withSession";
 
 const useStyles = makeStyles({
   container: {
@@ -40,9 +39,8 @@ Createpost.propTypes = {
   authKey: PropTypes.string,
 };
 
-export async function getServerSideProps({ req, res }) {
-  await applySession(req, res, sessionConfigure);
-  let { authKey } = req.session;
+export const getServerSideProps = withSession(async function ({ req }) {
+  const authKey = req.session.get("authKey");
   await dbConnect();
 
   if (!authKey) {
@@ -79,4 +77,4 @@ export async function getServerSideProps({ req, res }) {
   }
 
   return { props: { authKey } };
-}
+});

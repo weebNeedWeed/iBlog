@@ -10,9 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Footer from "../layouts/Footer/Footer.index";
 import { toast } from "react-toastify";
-import sessionConfigure from "../utils/sessionConfigure";
-import { applySession } from "next-session";
 import { useRouter } from "next/router";
+import withSession from "./../utils/withSession";
 
 const useStyles = makeStyles({
   container: {
@@ -150,9 +149,8 @@ export default function Login() {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
-  await applySession(req, res, sessionConfigure);
-  const { authKey } = req.session;
+export const getServerSideProps = withSession(async ({ req }) => {
+  const authKey = req.session.get("authKey");
 
   if (authKey) {
     return {
@@ -164,4 +162,4 @@ export async function getServerSideProps({ req, res }) {
   }
 
   return { props: {} };
-}
+});

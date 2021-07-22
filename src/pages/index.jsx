@@ -11,8 +11,7 @@ import dbConnect from "./../utils/dbConnect";
 import Post from "./../models/Post";
 import PropTypes from "prop-types";
 import Footer from "../layouts/Footer/Footer.index";
-import sessionConfigure from "../utils/sessionConfigure";
-import { applySession } from "next-session";
+import withSession from "./../utils/withSession";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -85,8 +84,7 @@ Home.propTypes = {
   loggedIn: PropTypes.bool,
 };
 
-export async function getServerSideProps({ req, res }) {
-  await applySession(req, res, sessionConfigure);
+export const getServerSideProps = withSession(async function ({ req }) {
   await dbConnect();
   const topFiveLatestPosts = await Post.find(
     {},
@@ -98,7 +96,7 @@ export async function getServerSideProps({ req, res }) {
   return {
     props: {
       listPosts: JSON.stringify(topFiveLatestPosts),
-      loggedIn: Boolean(req.session.authKey),
+      loggedIn: Boolean(req.session.get("authKey")),
     },
   };
-}
+});

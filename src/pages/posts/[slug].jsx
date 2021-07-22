@@ -3,8 +3,6 @@ import Head from "next/head";
 import NavBar from "./../../layouts/NavBar/NavBar.index";
 import PropTypes from "prop-types";
 import Footer from "../../layouts/Footer/Footer.index";
-import sessionConfigure from "../../utils/sessionConfigure";
-import { applySession } from "next-session";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Container from "@material-ui/core/Container";
@@ -12,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import CustomEditor from "./../../components/CustomEditor/CustomEditor.index";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
+import withSession from "./../../utils/withSession";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
@@ -82,7 +81,6 @@ Posts.propTypes = {
   loggedIn: PropTypes.bool,
 };
 
-export async function getServerSideProps({ req, res }) {
-  await applySession(req, res, sessionConfigure);
-  return { props: { loggedIn: Boolean(req.session.authKey) } };
-}
+export const getServerSideProps = withSession(async function ({ req }) {
+  return { props: { loggedIn: Boolean(req.session.get("authKey")) } };
+});

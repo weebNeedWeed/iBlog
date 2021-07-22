@@ -11,8 +11,7 @@ import PropTypes from "prop-types";
 import useSWR from "swr";
 import { toast } from "react-toastify";
 import Footer from "../../layouts/Footer/Footer.index";
-import sessionConfigure from "../../utils/sessionConfigure";
-import { applySession } from "next-session";
+import withSession from "./../../utils/withSession";
 
 const useStyles = makeStyles({
   container: {
@@ -100,15 +99,14 @@ Posts.propTypes = {
   loggedIn: PropTypes.bool,
 };
 
-export async function getServerSideProps({ req, res }) {
-  await applySession(req, res, sessionConfigure);
+export const getServerSideProps = withSession(async function ({ req }) {
   await dbConnect();
   const postCount = await Post.countDocuments();
 
   return {
     props: {
       postCount,
-      loggedIn: Boolean(req.session.authKey),
+      loggedIn: Boolean(req.session.get("authKey")),
     },
   };
-}
+});

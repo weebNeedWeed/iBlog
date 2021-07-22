@@ -1,13 +1,10 @@
-import { applySession } from "next-session";
-import sessionConfigure from "./../utils/sessionConfigure";
+import withSession from "./../utils/withSession";
 
 export default function Logout() {}
 
-export async function getServerSideProps({ req, res }) {
-  await applySession(req, res, sessionConfigure);
-
-  if (req.session.authKey) {
-    await req.session.destroy();
+export const getServerSideProps = withSession(async function ({ req }) {
+  if (req.session.get("authKey")) {
+    req.session.destroy();
   }
 
   return {
@@ -16,4 +13,4 @@ export async function getServerSideProps({ req, res }) {
       permanent: true,
     },
   };
-}
+});
