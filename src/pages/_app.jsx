@@ -15,7 +15,11 @@ function MyApp({ Component, pageProps }) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-      </Head>
+		<meta property="og:title" content="iBlog 2021" />
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="https://www.freethink.com/wp-content/uploads/2021/06/disease-resistant-banana_opengraph.jpg" />
+		<meta property="og:description" content="iBlog 2021 blog readwrite" />
+	  </Head>
 
       <ThemeProvider theme={customTheme}>
         <NextNprogress
